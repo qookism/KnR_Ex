@@ -4,46 +4,11 @@
 #include <stdio.h>
 #define MAXLINE 100
 
-int get_line(char *, int);
-
-int main()
-{
-    int len;
-    int nblank;
-    char line[MAXLINE];
-    char longest[MAXLINE];
-
-    nblank = 0;
-    while((len = get_line(line, MAXLINE)) > 0)
-    {
-        for (int i = 0; i < len; i++)
-        {
-            if(line[i] == ' ')
-            {
-                nblank++;
-            }
-            else if (/* condition */)
-            {
-                /* code */
-            }
-            
-        }
-        
-        // 빈칸이 4개면 탭 1개로 변경
-        // 빈칸 개수를 저장하는 변수 추가
-        //  
-
-    }
-
-
-    return 0;
-}
-
 int get_line(char s[], int lim)
 {
     int c, i;
 
-    for (i = 0; i < lim -1 && (c=getchar()) !=EOF && c!='\n'; ++i)
+    for (i = 0; i < lim - 1 && (c = getchar()) != EOF && c != '\n'; ++i)
     {
         s[i] = c;
     }
@@ -57,4 +22,93 @@ int get_line(char s[], int lim)
     s[i] = '\0';
 
     return i;
+}
+
+/* return is index */
+int change_tab(char line[], int len, int len_blank)
+{
+    int index_tab_start = len-len_blank ;
+    int outindex;
+
+
+    switch (len_blank)
+    {
+    case 0:
+    case 1:
+    case 2:
+        outindex = len;
+        break;
+    
+    case 3:
+    case 4:
+    case 5:
+        line[index_tab_start] = '\t';       // 이미 이때 이 다음 문자가 대입되어 있는 상태임. 한개씩 밀림
+        outindex = index_tab_start;
+        break;
+
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+        line[index_tab_start++] = '\t';
+        line[index_tab_start] = '\t';
+        outindex = index_tab_start;
+        break;
+    default:
+        break;
+    }
+    
+
+    return outindex;
+}
+
+int main()
+{
+    int len;
+    int nblank;
+    char line[MAXLINE];
+    char outline[MAXLINE];
+
+    nblank = 0;
+    while ((len = get_line(line, MAXLINE)) > 0)
+    {
+        int start_blank = 0;
+        int end_blank = 0;
+        int i, j;
+
+        for (i = 0, j = 0;; i++, j++)
+        {
+            if (line[i] != EOF)
+            {
+                outline[j] = line[i];
+
+                if (line[i] == ' ')
+                {
+                    if (!start_blank)
+                        start_blank = i;
+                }
+                else if (line[i] != ' ')
+                {
+                    if(start_blank)
+                    {
+                        end_blank = i;
+
+                        nblank = end_blank - start_blank;
+
+                    }
+
+                    j = change_tab(outline, j, nblank);
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+
+    printf("in  : %s\nout : %s\n",line, outline);
+
+    return 0;
 }

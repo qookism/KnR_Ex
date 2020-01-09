@@ -77,9 +77,9 @@ int main()
         int end_blank = 0;
         int i, j;
 
-        for (i = 0, j = 0;; i++, j++)
+        for (i = 0, j = 0; i < len; i++, j++)
         {
-            if (line[i] != EOF)
+            if (line[i] != '\0')
             {
                 outline[j] = line[i];
 
@@ -96,12 +96,13 @@ int main()
 
                         nblank = end_blank - start_blank;
 
+                        j = change_tab(outline, j, nblank);
+                        outline[++j] = line[i];
+
                         start_blank = end_blank = nblank = 0;
 
                     }
 
-                    j = change_tab(outline, j, nblank);
-                    outline[++j] = line[i];
                 }
             }
             else
@@ -109,9 +110,11 @@ int main()
                 break;
             }
         }
+
+        outline[j] = '\0';
     }
 
-    printf("in  : %s\nout : %s\n",line, outline);
+    printf("out : %s\n", outline);
 
     return 0;
 }

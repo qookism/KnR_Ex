@@ -96,9 +96,12 @@ int main()
 
                         nblank = end_blank - start_blank;
 
+                        start_blank = end_blank = nblank = 0;
+
                     }
 
                     j = change_tab(outline, j, nblank);
+                    outline[++j] = line[i];
                 }
             }
             else

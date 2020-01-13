@@ -1,9 +1,8 @@
 /*  the c programing language 2nd   */
-/*  ex 1-20                         */
+/*  ex 1-21                         */
 /* hyokook kim                      */
 #include <stdio.h>
 #define MAXLINE 100
-#define TABSIZE 8
 
 int get_line(char s[], int lim)
 {
@@ -25,33 +24,49 @@ int get_line(char s[], int lim)
     return i;
 }
 
-
 int main(void)
 {
     int len;
+    int nblank;
     char line[MAXLINE];
 
     while ((len = get_line(line, MAXLINE)) > 0)
     {
-        for (int i = 0; i < len; i++)
+
+        int nblank = 0;
+        for (int i = 0; i < len ; i++)
         {
-            if(line[i] == '\t')
+            if(line[i] == ' ')
             {
-
-                len += TABSIZE;
-
-                for (int j = len; j > i + TABSIZE; j--)
-                {
-                    line[j-1] = line[j - TABSIZE];
-                }
-
-                for (int k = i; k < i + TABSIZE; k++)
-                    line[k] = ' ';
+                nblank++;
             }
+            else
+            {
+                nblank = 0;
+            }
+
+            if(nblank == 4)
+            {
+                i -= 3;
+                len -= 3;
+
+                line[i] = '\t';
+
+                for( int j = i + 1 ; j < len ; j++)
+                {
+                    line[j] = line[j+3];
+                }
+                nblank = 0;
+
+                line[len] = '\0';
+
+            }
+            
         }
 
         printf("%s", line);
-
+        
+       
     }
 
 

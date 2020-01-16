@@ -1,3 +1,4 @@
+
 /*  the c programing language 2nd   */
 /*  ex 1-23                         */
 #include <stdio.h>
@@ -40,48 +41,59 @@ int main()
     {
         for (int i = 0; i < len; i++)
         {
-            if (linein[i] == '/')
+
+            if ((slash[START] == 0) || (star[START] == 0))
             {
-               slash[START] = i; 
-               continue;
+                if (linein[i] == '/')
+                {
+                    slash[START] = i;     /* when first character is /, error */
+                    continue;
+                }
+
+                if (((i - slash[START]) == 1) && (linein[i] == '*'))
+                {
+                    star[START] = i;
+                    linein[i] = linein[i-1] = ' ';
+                    continue;
+                }
+
+                if (((i - slash[START]) == 1) && (linein[i] != '*'))
+                {
+                    slash[START] = 0; /* reset start flag */
+                }
             }
 
-            if (((i - slash[START]) == 1) && (linein[i] == '*'))
+            if (slash[START] && star[START])
             {
-                star[START] = i;
-                continue;
-            }
 
-            if()
-            {
-                slash[START] = 0;  /* reset start flag */
-            }
-            
+                if (linein[i] == '*')
+                {
+                    star[END] = i;
+                    continue;
+                }
 
-            if(slash[START] && star[START] )
-            {
-               if((slash[END] == 0) && (star[END] == 0)) 
-               {
-                   linein[i] = ' ';
-                   continue;
-               }
+                if ((i - star[END] == 1) && (linein[i] == '/'))
+                {
+                    slash[END] = i;
+                    continue;
+                }
 
-               if(linein[i] == '*')
-               {
-                   star[END] = i;
-                   continue;
+                if (((i - star[END]) == 1) && (linein[i] != '/'))
+                {
+                    star[END] = 0; /* reset start flag */
+                }
 
-               }
+                if ((slash[END] == 0) && (star[END] == 0))
+                {
+                    linein[i] = ' ';
+                    continue;
+                }
 
-               if ((i - star[END] == 1) && (linein[i] == '/'))
-               {
-                   slash[END] = i;
-               }
-
-               if (slash[END] && star[END])
-               {
-                   slash[START] = star[START] = slash[END] = star[END] = 0;
-               }
+                if (slash[END] && star[END])
+                {
+                    linein[slash[END]] = linein[star[END]] = ' ';
+                    slash[START] = star[START] = slash[END] = star[END] = 0;
+                }
                
 
             }

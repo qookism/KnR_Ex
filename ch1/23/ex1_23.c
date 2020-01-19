@@ -7,6 +7,7 @@
 #define FALSE   0
 #define START   0
 #define END     1
+#define NONE    -1
 
 int get_line(char s[], int lim)
 {
@@ -37,12 +38,15 @@ int main()
     int star[2];
 
     max = 0;
+    slash[0] = slash[1] = -1;
+    star[0] = star[1] = -1;
+
     while((len = get_line(linein, MAXLINE)) > 0)
     {
         for (int i = 0; i < len; i++)
         {
 
-            if ((slash[START] == 0) || (star[START] == 0))
+            if ((slash[START] == NONE) || (star[START] == NONE))
             {
                 if (linein[i] == '/')
                 {
@@ -59,11 +63,11 @@ int main()
 
                 if (((i - slash[START]) == 1) && (linein[i] != '*'))
                 {
-                    slash[START] = 0; /* reset start flag */
+                    slash[START] = NONE; /* reset start flag */
                 }
             }
 
-            if (slash[START] && star[START])
+            if ((slash[START] != NONE) && (star[START] != NONE))
             {
 
                 if (linein[i] == '*')
@@ -83,7 +87,7 @@ int main()
                     star[END] = 0; /* reset start flag */
                 }
 
-                if ((slash[END] == 0) && (star[END] == 0))
+                if ((slash[END] == NONE) && (star[END] == NONE))
                 {
                     linein[i] = ' ';
                     continue;
@@ -92,7 +96,7 @@ int main()
                 if (slash[END] && star[END])
                 {
                     linein[slash[END]] = linein[star[END]] = ' ';
-                    slash[START] = star[START] = slash[END] = star[END] = 0;
+                    slash[START] = star[START] = slash[END] = star[END] = NONE;
                 }
                
 
